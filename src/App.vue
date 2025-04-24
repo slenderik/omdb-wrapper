@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import FilmCard from './components/FilmCard.vue'
 import { ref, watch, onMounted } from 'vue'
 import { searchFilms } from './api'
 import type { Film } from './types'
 
 
 const films = ref<Film[]>([])
-const loading = ref(false) 
+const loading = ref(false)
 const searchQuery = ref<string>('')
 
 onMounted(async () => {
@@ -14,25 +15,21 @@ onMounted(async () => {
 })
 
 </script>
- 
+
 <template>
   <header>
     <form className="p-1 bg-gray-200">
       <input type="search" v-model="searchQuery" :disabled="loading"  placeholder="Search for a film"
         className="border border-black text-yellow"/>
-    </form> 
+    </form>
   </header>
 
   <main>
     <section>
       <h2>Results</h2>
-      <ul>
-        <li v-for="film in films" :key="film.Id">
-          <img :src="film.Poster" :alt="film.Title" />
-          <h3>{{ film.Title }}</h3>
-          <p>{{ film.Year }}</p>
-        </li>
-      </ul>
+      <div v-for="film in films" :key="film.Id">
+        <FilmCard :Id="film.Id" :Title="film.Title" :Type="film.Type" :Year="film.Year" :Poster="film.Poster" />
+      </div>
     </section>
 
   </main>
@@ -40,4 +37,31 @@ onMounted(async () => {
 
 <style scoped>
 @import "tailwindcss";
+
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
 </style>
